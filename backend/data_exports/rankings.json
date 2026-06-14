@@ -1,0 +1,44 @@
+[
+    {
+        "candidate_id": "244d2ab2-93e9-4a6b-831e-371ce679174a",
+        "job_id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "score": 83.0,
+        "rank": 1
+    },
+    {
+        "candidate_id": "a40b3ff5-6f34-473b-9c5c-d9f8166a20f8",
+        "job_id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "score": 83.0,
+        "rank": 2
+    },
+    {
+        "candidate_id": "c69df559-f11b-4f6e-a081-0b4daaeba755",
+        "job_id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "score": 83.0,
+        "rank": 3
+    },
+    {
+        "candidate_id": "180b15fe-c6f0-421b-a81d-b37319f564c6",
+        "job_id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "score": 13.0,
+        "rank": 4
+    },
+    {
+        "candidate_id": "b622fc55-def4-4e7b-8a36-322e30b0d110",
+        "job_id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "score": 13.0,
+        "rank": 5
+    },
+    {
+        "candidate_id": "cafb0f84-8848-4bf9-b8c1-e2f3d6a7a99c",
+        "job_id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "score": 13.0,
+        "rank": 6
+    },
+    {
+        "candidate_id": "ebb3b097-9b09-45f1-b67d-a7172dbbe8de",
+        "job_id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "score": 13.0,
+        "rank": 7
+    }
+]

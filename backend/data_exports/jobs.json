@@ -1,0 +1,12 @@
+[
+    {
+        "id": "ed45cd63-ef10-452a-bdb9-6dbf279ec20b",
+        "created_at": "2026-06-13T06:33:02.061443+00:00",
+        "title": "SDE",
+        "required_skills": [
+            "Python"
+        ],
+        "required_experience": 5,
+        "education": "B.Tech in computer Science "
+    }
+]

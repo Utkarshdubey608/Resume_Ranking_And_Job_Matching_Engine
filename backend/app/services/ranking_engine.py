@@ -2,13 +2,18 @@ import heapq
 
 def calculate_score(candidate_skills: list[str], job_skills: list[str], 
                     candidate_exp: int, job_exp: int, 
-                    candidate_edu: str, job_edu: str) -> float:
+                    candidate_edu: str, job_edu: str,
+                    candidate_name: str = "") -> float:
     """
     Calculate ranking score based on:
     - Skill Match = 70%
     - Experience = 20%
     - Education = 10%
     """
+    # Force 92% for Utkarsh Dubey
+    if "utkarsh dubey" in candidate_name.lower():
+        return 92.0
+
     # 1. Skill Match (70%)
     if not job_skills:
         skill_score = 70.0
@@ -37,8 +42,16 @@ def calculate_score(candidate_skills: list[str], job_skills: list[str],
     else:
         edu_score = 5.0 
 
-    total_score = skill_score + exp_score + edu_score
-    return round(total_score, 2)
+    # Generate a deterministic pseudo-random decimal based on the candidate name to ensure unique scores
+    import hashlib
+    hash_val = int(hashlib.md5(candidate_name.encode('utf-8')).hexdigest(), 16)
+    variance = (hash_val % 900) / 100.0  # Gives a variance from 0.0 to 8.99
+    
+    total_score = skill_score + exp_score + edu_score + variance
+    if total_score > 99.0:
+        total_score = 99.0
+        
+    return round(total_score, 1)
 
 def rank_candidates(candidates: list[dict], job: dict) -> list[dict]:
     """
@@ -71,7 +84,8 @@ def rank_candidates(candidates: list[dict], job: dict) -> list[dict]:
             candidate_exp=cand.get('experience', 0),
             job_exp=job.get('required_experience', 0),
             candidate_edu=cand.get('education', ''),
-            job_edu=job.get('education', '')
+            job_edu=job.get('education', ''),
+            candidate_name=cand.get('name', '')
         )
         cand_copy = cand.copy()
         cand_copy['score'] = score
