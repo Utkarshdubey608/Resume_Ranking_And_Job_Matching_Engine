@@ -38,10 +38,7 @@ async def get_match_percentage(candidate_id: str, job_id: str):
             raise HTTPException(status_code=404, detail="Job not found")
         job = job_res.data[0]
         
-        match_result = match_candidate_to_job(
-            candidate_skills=cand.get('skills', []),
-            job_skills=job.get('required_skills', [])
-        )
+        match_result = match_candidate_to_job(cand, job)
         
         return match_result
     except Exception as e:

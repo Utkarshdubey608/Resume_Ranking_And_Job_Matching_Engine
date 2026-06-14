@@ -32,10 +32,10 @@ async def upload_resume(
 
     file_hash = hashlib.sha256(content).hexdigest()
     
-    # Deduplication check
-    existing = supabase.table("candidates").select("id").eq("file_hash", file_hash).execute()
+    # Deduplication check by name (since file_hash is missing from schema)
+    existing = supabase.table("candidates").select("id").eq("name", name).execute()
     if existing.data and len(existing.data) > 0:
-        raise HTTPException(status_code=400, detail="This resume has already been uploaded.")
+        raise HTTPException(status_code=409, detail=f"A candidate named '{name}' has already been uploaded.")
 
     # Validation check
     if not is_valid_resume(resume_text):
@@ -53,8 +53,7 @@ async def upload_resume(
         "experience": experience,
         "skills": skills,
         "certifications": certs_list,
-        "resume_text": resume_text,
-        "file_hash": file_hash
+        "resume_text": resume_text
     }
 
     try:

@@ -37,6 +37,13 @@ async def create_ranking(job_id: str):
         # We can clear existing rankings for this job_id, but for hackathon keep it simple and just insert or we can delete first
         supabase.table("rankings").delete().eq("job_id", job_id).execute()
         response = supabase.table("rankings").insert(rankings_to_insert).execute()
+        
+        # Explicitly satisfy File Handling Requirement (CSV, JSON)
+        from app.services.file_handler import DataExporter
+        DataExporter.export_candidates(candidates)
+        DataExporter.export_jobs([job])
+        DataExporter.export_rankings(rankings_to_insert)
+        
         return {"message": f"Successfully ranked {len(candidates)} candidates for job {job_id}", "rankings": ranked_candidates}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

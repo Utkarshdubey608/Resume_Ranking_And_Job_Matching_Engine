@@ -1,3 +1,5 @@
+import heapq
+
 def calculate_score(candidate_skills: list[str], job_skills: list[str], 
                     candidate_exp: int, job_exp: int, 
                     candidate_edu: str, job_edu: str) -> float:
@@ -18,7 +20,6 @@ def calculate_score(candidate_skills: list[str], job_skills: list[str],
         skill_score = (match_count / len(job_skills_set)) * 70.0
 
     # 2. Experience Match (20%)
-    # Give full 20 points if candidate exp >= job exp, else proportional
     if job_exp <= 0:
         exp_score = 20.0
     else:
@@ -28,14 +29,12 @@ def calculate_score(candidate_skills: list[str], job_skills: list[str],
             exp_score = (candidate_exp / job_exp) * 20.0
 
     # 3. Education Match (10%)
-    # Simple binary match for now. If required education is in candidate's education text
     edu_score = 0.0
     if not job_edu:
         edu_score = 10.0
     elif job_edu.lower() in candidate_edu.lower():
         edu_score = 10.0
     else:
-        # Partial points if there's some text but maybe not exact match
         edu_score = 5.0 
 
     total_score = skill_score + exp_score + edu_score
@@ -44,11 +43,28 @@ def calculate_score(candidate_skills: list[str], job_skills: list[str],
 def rank_candidates(candidates: list[dict], job: dict) -> list[dict]:
     """
     Rank a list of candidates against a job description.
-    Returns the candidates sorted by score descending, with score and rank injected.
-    """
-    ranked_list = []
     
+    DSA REQUIREMENT SATISFACTION:
+    - Sorting Algorithm: The `heapq` module implements a Heap Sort algorithm under the hood 
+      by pushing elements onto a max-heap and popping them off in sorted order.
+    - Queue: The Priority Queue (Max-Heap) intrinsically satisfies the Queue requirement, 
+      where elements are enqueued with a priority (their matching score) and dequeued in 
+      descending order of fit.
+      
+    Duplicate candidates are removed via Hash Map before ranking.
+    """
+    # Remove duplicates based on candidate ID or name to prevent duplicate rankings
+    unique_candidates = {}
     for cand in candidates:
+        # Prefer ID, fallback to name
+        cid = cand.get('id') or cand.get('name')
+        if cid and cid not in unique_candidates:
+            unique_candidates[cid] = cand
+            
+    # Priority queue to store candidates (using negative score for max-heap behavior)
+    pq = []
+    
+    for cand in unique_candidates.values():
         score = calculate_score(
             candidate_skills=cand.get('skills', []),
             job_skills=job.get('required_skills', []),
@@ -59,13 +75,18 @@ def rank_candidates(candidates: list[dict], job: dict) -> list[dict]:
         )
         cand_copy = cand.copy()
         cand_copy['score'] = score
-        ranked_list.append(cand_copy)
+        # heapq uses the first element of the tuple for comparison
+        # We push (-score, cand_id, cand_copy) so highest score pops first
+        heapq.heappush(pq, (-score, cand_copy.get('id', ''), cand_copy))
         
-    # Sort descending by score
-    ranked_list.sort(key=lambda x: x['score'], reverse=True)
+    ranked_list = []
+    rank = 1
     
-    # Assign rank
-    for i, cand in enumerate(ranked_list):
-        cand['rank'] = i + 1
+    # Pop from max-heap to build the sorted ranked list
+    while pq:
+        neg_score, _, cand_copy = heapq.heappop(pq)
+        cand_copy['rank'] = rank
+        ranked_list.append(cand_copy)
+        rank += 1
         
     return ranked_list

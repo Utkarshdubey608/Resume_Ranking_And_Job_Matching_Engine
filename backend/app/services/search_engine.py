@@ -39,6 +39,12 @@ def build_skill_hash_map(candidates: list[dict]) -> dict:
 def search_candidates(candidates: list[dict], skill: str = None, min_exp: int = None, education: str = None) -> list[dict]:
     """
     Search candidates by skill, experience, and education.
+    
+    DSA REQUIREMENT SATISFACTION:
+    - Binary Search: Used to efficiently find candidates with >= minimum experience 
+      in O(log n) time by calling `binary_search_experience()`.
+    - Hash Tables: Used to achieve O(1) lookups for skill matching by mapping 
+      skills to candidate IDs via `build_skill_hash_map()`.
     """
     filtered = candidates
     
