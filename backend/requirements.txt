@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+supabase
+python-multipart
+PyPDF2
+python-docx
+scikit-learn
+matplotlib
+seaborn
+pandas
+python-dotenv
+streamlit
+requests
+pydantic
+pytest
+pytest-asyncio
+httpx
